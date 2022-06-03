@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "smip.smx.pit.2022.webapp", "smip.smx.pit.2022.webapp\smip.smx.pit.2022.webapp.csproj", "{71D21CD2-AAAB-487D-8E36-F1F6CB2EC12A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71D21CD2-AAAB-487D-8E36-F1F6CB2EC12A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71D21CD2-AAAB-487D-8E36-F1F6CB2EC12A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71D21CD2-AAAB-487D-8E36-F1F6CB2EC12A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71D21CD2-AAAB-487D-8E36-F1F6CB2EC12A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {27C63769-F882-4019-9AEB-652D04859079}
+	EndGlobalSection
+EndGlobal

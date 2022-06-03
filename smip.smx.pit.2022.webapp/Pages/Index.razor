@@ -1,0 +1,45 @@
+﻿@page "/home"
+
+<PageTitle>Home</PageTitle>
+
+<h1>CESMII SMIP!</h1>
+
+@using smip.smx.pit._2022.webapp.Data
+@using Newtonsoft.Json.Linq
+
+@inject SmipService SmipService
+
+@if (libraries == null)
+{
+  <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>displayName</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (JObject aLibrary in libraries["libraries"] as JArray)
+            {
+                <tr>
+                    <td>@(aLibrary["id"].Value<string>())</td>
+                    <td>@(aLibrary["displayName"].Value<string>())</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private JObject libraries;
+
+    protected override async Task OnInitializedAsync()
+    {
+        libraries = (await SmipService.GetLibrariesAsync()).Data;
+    }
+}
+
