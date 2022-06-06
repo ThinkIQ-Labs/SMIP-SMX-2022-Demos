@@ -15,24 +15,25 @@ else
 {
     @foreach(var aDiskEvent in diskEvents)
     {
-        <div>@aDiskEvent.startTime.ToString("d") @aDiskEvent.startTime.ToString("t") - @aDiskEvent.endTime.ToString("t") - Disks: @aDiskEvent.diskCount</div>
-
-        <div class="p-1" style="background-color:#f78200; border-radius: 10px; overflow-wrap: break-word;">
-        @foreach(var aDisk in aDiskEvent.diskDictionary.Values)
-        {
-            switch (aDisk)
+        <div>
+            @aDiskEvent.startTime.ToString("d") @aDiskEvent.startTime.ToString("t") - @aDiskEvent.endTime.ToString("t") - Disks: @aDiskEvent.diskCount
+        </div>
+            <div class="p-1" style="background-color:#f78200; border-radius: 10px; word-break: break-all;">
+            @foreach(var aDisk in aDiskEvent.diskDictionary.Values)
             {
-                case "white":
-                    <span class="px-1" style="color:white;font-size: x-large;" aria-hidden="true">⬤</span>
-                    break;
-                case "black":
-                    <span class="px-1" style="color:black;font-size: x-large;" aria-hidden="true">⬤</span>
-                    break;
-                case "aluminum":
-                    <span class="px-1" style="color:gray;font-size: x-large;" aria-hidden="true">⬤</span>
-                    break;
+                switch (aDisk)
+                {
+                    case "white":
+                        <span class="px-1" style="color:white;font-size: x-large;" aria-hidden="true">⬤</span>
+                        break;
+                    case "black":
+                        <span class="px-1" style="color:black;font-size: x-large;" aria-hidden="true">⬤</span>
+                        break;
+                    case "aluminum":
+                        <span class="px-1" style="color:gray;font-size: x-large;" aria-hidden="true">⬤</span>
+                        break;
+                }
             }
-        }
         </div>
         <hr />
     }
@@ -183,7 +184,7 @@ else
                     DiskEvent activeEvent = new DiskEvent();
                     for (int i = 0; i < diskDictionary.Count; i++)
                     {
-                        if (delays[i].TotalSeconds > 1000)
+                        if (delays[i].TotalSeconds > 300)
                         {
                             activeEvent.delays.Reverse();
                             diskEvents.Add(activeEvent);
