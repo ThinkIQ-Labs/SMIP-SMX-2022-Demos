@@ -1,4 +1,6 @@
-﻿namespace smip.smx.pit._2022.webapp.Data
+﻿using NodaTime;
+
+namespace smip.smx.pit._2022.webapp.Data
 {
     public class SmipEquipment
     {
@@ -32,7 +34,10 @@
         {
             get
             {
-                return DateTimeOffset.Parse(ts);
+                var instantUTC = Instant.FromDateTimeUtc(DateTimeOffset.Parse(ts).UtcDateTime);
+                var instantInZone = instantUTC.InZone(DateTimeZoneProviders.Tzdb["America/New_York"]);
+                return instantInZone.ToOffsetDateTime().ToDateTimeOffset();
+                //return DateTimeOffset.Parse(ts);
             }
         }
         public int? intvalue { get; set; }
