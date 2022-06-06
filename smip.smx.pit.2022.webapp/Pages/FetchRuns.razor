@@ -17,21 +17,23 @@ else
     {
         <div>@aDiskEvent.startTime.ToString("d") @aDiskEvent.startTime.ToString("t") - @aDiskEvent.endTime.ToString("t") - Disks: @aDiskEvent.diskCount</div>
 
+        <div class="p-1" style="background-color:#f78200; border-radius: 10px; overflow-wrap: break-word;">
         @foreach(var aDisk in aDiskEvent.diskDictionary.Values)
         {
             switch (aDisk)
             {
                 case "white":
-                    <span class="oi oi-circle-x" style="color:lightgray" aria-hidden="true"></span>
+                    <span class="px-1" style="color:white;font-size: x-large;" aria-hidden="true">⬤</span>
                     break;
                 case "black":
-                    <span class="oi oi-circle-x" style="color:black" aria-hidden="true"></span>
+                    <span class="px-1" style="color:black;font-size: x-large;" aria-hidden="true">⬤</span>
                     break;
                 case "aluminum":
-                    <span class="oi oi-circle-x" style="color:darkgray" aria-hidden="true"></span>
+                    <span class="px-1" style="color:gray;font-size: x-large;" aria-hidden="true">⬤</span>
                     break;
             }
         }
+        </div>
         <hr />
     }
 
@@ -89,104 +91,124 @@ else
     {
         if (firstRender)
         {
-            smipEquipment = await SmipService.GetCountersTs(DateTimeOffset.Parse("2022-01-01"), DateTimeOffset.Parse("2022-07-01"));
 
-            // remove dirty ts records (i.e. when the count goes up and then comes back down)
+            // use diskCount variable to determine if we need to re-render for new disks
+            var diskCount = 0;
 
-            // remove duplicates
-            smipEquipment.attributes.ForEach(aAttribute =>
+            // loop continously with 5sec delay
+            while (true)
             {
-                for (int i = 1; i < aAttribute.getTimeSeries.Count - 1; i++)
-                {
-                    if (aAttribute.getTimeSeries[i + 1].intvalue == aAttribute.getTimeSeries[i].intvalue)
-                    {
-                        aAttribute.getTimeSeries.RemoveAt(i + 1);
-                        i--;
-                    }
-                }
-            });
 
-            // remove up-downs
-            smipEquipment.attributes.ForEach(aAttribute =>
-            {
-                for (int i = 1; i < aAttribute.getTimeSeries.Count - 2; i++)
-                {
-                    if (aAttribute.getTimeSeries[i + 1].intvalue > aAttribute.getTimeSeries[i].intvalue && aAttribute.getTimeSeries[i + 2].intvalue == aAttribute.getTimeSeries[i].intvalue)
-                    {
-                        aAttribute.getTimeSeries.RemoveRange(i + 1, 2);
-                        i--;
-                    }
-                }
-            });
+                smipEquipment = await SmipService.GetCountersTs(DateTimeOffset.Parse("2022-01-01"), DateTimeOffset.Parse("2022-07-01"));
 
-            // build sorted dictionary of disks where the timestamp is the key
-            smipEquipment.attributes.ForEach(aAttribute =>
-            {
-                foreach (var aTs in aAttribute.getTimeSeries.Select((ts, index) => (ts, index)))
+                // remove dirty ts records (i.e. when the count goes up and then comes back down)
+
+                // remove duplicates
+                smipEquipment.attributes.ForEach(aAttribute =>
                 {
-                    if (aTs.index > 0)
+                    for (int i = 1; i < aAttribute.getTimeSeries.Count - 1; i++)
                     {
-                        if (aTs.ts.intvalue == aAttribute.getTimeSeries[aTs.index - 1].intvalue + 1)
+                        if (aAttribute.getTimeSeries[i + 1].intvalue == aAttribute.getTimeSeries[i].intvalue)
                         {
-                            switch (aAttribute.displayName)
+                            aAttribute.getTimeSeries.RemoveAt(i + 1);
+                            i--;
+                        }
+                    }
+                });
+
+                // remove up-downs
+                smipEquipment.attributes.ForEach(aAttribute =>
+                {
+                    for (int i = 1; i < aAttribute.getTimeSeries.Count - 2; i++)
+                    {
+                        if (aAttribute.getTimeSeries[i + 1].intvalue > aAttribute.getTimeSeries[i].intvalue && aAttribute.getTimeSeries[i + 2].intvalue == aAttribute.getTimeSeries[i].intvalue)
+                        {
+                            aAttribute.getTimeSeries.RemoveRange(i + 1, 2);
+                            i--;
+                        }
+                    }
+                });
+
+                // build sorted dictionary of disks where the timestamp is the key
+                diskDictionary = new SortedDictionary<DateTimeOffset, string>();
+                smipEquipment.attributes.ForEach(aAttribute =>
+                {
+                    foreach (var aTs in aAttribute.getTimeSeries.Select((ts, index) => (ts, index)))
+                    {
+                        if (aTs.index > 0)
+                        {
+                            if (aTs.ts.intvalue == aAttribute.getTimeSeries[aTs.index - 1].intvalue + 1)
                             {
-                                case "Count White":
-                                    diskDictionary.TryAdd(aTs.ts.tsDateTimeOffset, "white");
-                                    break;
+                                switch (aAttribute.displayName)
+                                {
+                                    case "Count White":
+                                        diskDictionary.TryAdd(aTs.ts.tsDateTimeOffset, "white");
+                                        break;
 
-                                case "Count Black":
-                                    diskDictionary.TryAdd(aTs.ts.tsDateTimeOffset, "black");
-                                    break;
+                                    case "Count Black":
+                                        diskDictionary.TryAdd(aTs.ts.tsDateTimeOffset, "black");
+                                        break;
 
-                                case "Count Aluminum":
-                                    diskDictionary.TryAdd(aTs.ts.tsDateTimeOffset, "aluminum");
-                                    break;
+                                    case "Count Aluminum":
+                                        diskDictionary.TryAdd(aTs.ts.tsDateTimeOffset, "aluminum");
+                                        break;
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
 
-            // populate array with delays between disks
-            List<TimeSpan> delays = new List<TimeSpan>();
-            for (int i = 0; i < diskDictionary.Count; i++)
-            {
-                if (i == 0)
+                // only rebuild diskEvents when there's new disks
+                if (diskCount != diskDictionary.Count)
                 {
-                    delays.Add(TimeSpan.FromSeconds(0));
+
+                    diskCount = diskDictionary.Count;
+
+                    // populate array with delays between disks
+                    List<TimeSpan> delays = new List<TimeSpan>();
+                    for (int i = 0; i < diskDictionary.Count; i++)
+                    {
+                        if (i == 0)
+                        {
+                            delays.Add(TimeSpan.FromSeconds(0));
+                        }
+                        else
+                        {
+                            delays.Add(diskDictionary.ElementAt(i).Key - diskDictionary.ElementAt(i - 1).Key);
+                        }
+                    }
+
+                    // build dictionary of batches, disks are separated by more than 1000 seconds
+                    diskEvents = new List<DiskEvent>();
+                    DiskEvent activeEvent = new DiskEvent();
+                    for (int i = 0; i < diskDictionary.Count; i++)
+                    {
+                        if (delays[i].TotalSeconds > 1000)
+                        {
+                            activeEvent.delays.Reverse();
+                            diskEvents.Add(activeEvent);
+                            activeEvent = new DiskEvent();
+                        }
+                        else
+                        {
+                            var aElement = diskDictionary.ElementAt(i);
+                            activeEvent.diskDictionary.Add(aElement.Key, aElement.Value);
+                            activeEvent.delays.Add(delays[i]);
+                        }
+                    }
+                    if (activeEvent.diskCount > 0)
+                    {
+                        activeEvent.delays.Reverse();
+                        diskEvents.Add(activeEvent);
+                    }
+
+                    diskEvents.Reverse();
+
+                    this.StateHasChanged();
                 }
-                else
-                {
-                    delays.Add(diskDictionary.ElementAt(i).Key - diskDictionary.ElementAt(i - 1).Key);
-                }
+
+                Thread.Sleep(5000);
             }
-
-            // build dictionary of batches, disks are separated by more than 1000 seconds
-            DiskEvent activeEvent = new DiskEvent();
-            for (int i = 0; i < diskDictionary.Count; i++)
-            {
-                if (delays[i].TotalSeconds > 1000)
-                {
-                    activeEvent.delays.Reverse();
-                    diskEvents.Add(activeEvent);
-                    activeEvent = new DiskEvent();
-                }
-                else
-                {
-                    var aElement = diskDictionary.ElementAt(i);
-                    activeEvent.diskDictionary.Add(aElement.Key, aElement.Value);
-                    activeEvent.delays.Add(delays[i]);
-                }
-            }
-            if (activeEvent.diskCount > 0)
-            {
-                activeEvent.delays.Reverse();
-                diskEvents.Add(activeEvent);
-            }
-
-            diskEvents.Reverse();
-
-            this.StateHasChanged();
         }
 
     }
