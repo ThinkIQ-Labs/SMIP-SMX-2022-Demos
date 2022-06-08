@@ -187,7 +187,10 @@ else
                         if (delays[i].TotalSeconds > 300)
                         {
                             activeEvent.delays.Reverse();
-                            diskEvents.Add(activeEvent);
+                            if (activeEvent.diskCount > 0)
+                            {
+                                diskEvents.Add(activeEvent);
+                            }
                             activeEvent = new DiskEvent();
                         }
                         else
@@ -200,7 +203,9 @@ else
                     if (activeEvent.diskCount > 0)
                     {
                         activeEvent.delays.Reverse();
-                        diskEvents.Add(activeEvent);
+                        if(activeEvent.diskCount>0) {
+                            diskEvents.Add(activeEvent);
+                        }
                     }
 
                     diskEvents.Reverse();
