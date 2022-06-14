@@ -17,6 +17,7 @@ namespace smip.smx.pit._2022.desktop.WinUI
         public App()
         {
             this.InitializeComponent();
+
         }
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
