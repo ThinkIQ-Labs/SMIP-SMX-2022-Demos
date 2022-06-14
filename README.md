@@ -11,9 +11,9 @@ Note-worthy C# goodies include:
 
 ## .Net Core Blazor Server App
 
-Blazor [WebApp](https://smipsmxpit2022webapp.azurewebsites.net/): 
+Amatrol Robot at convention floor with Blazor [WebApp](https://smipsmxpit2022webapp.azurewebsites.net/): 
 
-![Screenshot](./screenshot.jpg)
+![Screenshot](./amatrol_w_report.jpg)
 
 ## .Net Core MAUI Blazor App
 
