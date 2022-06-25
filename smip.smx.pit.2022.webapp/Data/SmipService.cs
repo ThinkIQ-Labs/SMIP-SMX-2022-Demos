@@ -1,6 +1,8 @@
 ﻿using GraphQL;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using smip.sdk;
+using smip.sdk.SmipModel;
 
 namespace smip.smx.pit._2022.webapp.Data
 {

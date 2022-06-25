@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace smip.smx.pit._2022.webapp.Data
+namespace smip.sdk
 {
     public class Authenticator
     {

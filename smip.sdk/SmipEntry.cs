@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 
-namespace smip.smx.pit._2022.webapp.Data
+namespace smip.sdk
 {
     public class SmipEntry
     {
@@ -198,6 +198,4 @@ namespace smip.smx.pit._2022.webapp.Data
         }
 
     }
-
-
 }

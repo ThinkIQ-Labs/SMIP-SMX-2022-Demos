@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using smip.sdk;
 using smip.smx.pit._2022.webapp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
