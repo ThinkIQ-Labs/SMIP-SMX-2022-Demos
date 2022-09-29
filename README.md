@@ -1,6 +1,6 @@
 # SMIP-SMX-2022
 
-This is a repository with two demo applications that render a report in real-time based on SMIP data. These demos were created for the Smart Manufacturing Experience (SMX) Conference in 2022 at the David L. LawrenceConference Center in Pittsburgh, PA. These demos were a collaboration between ThinkIQ, CESMII, and Amatrol.
+This is a repository with two demo applications that render a report in real-time based on SMIP data. These demos were created for the Smart Manufacturing Experience (SMX) Conference in 2022 at the David L. Lawrence Conference Center in Pittsburgh, PA. These demos were a collaboration between ThinkIQ, CESMII, and Amatrol.
 
 Note-worthy C# goodies include:
 
