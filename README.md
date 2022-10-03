@@ -17,6 +17,6 @@ Amatrol Robot at convention floor with Blazor [WebApp](https://smipsmxpit2022web
 
 ## .Net Core MAUI Blazor App
 
-Below is a screenshot of the same appliation but ported to utilize the new .NET Multi-platform App UI (.NET MAUI) framework - shown here running as a Windows Desktop App. This would allow running the demo without the need of hosting a WebApp.
+Below is a screenshot of the same application but ported to utilize the new .NET Multi-platform App UI (.NET MAUI) framework - shown here running as a Windows Desktop App. This would allow running the demo without needing to host a WebApp.
 
 ![Screenshot](./screenshot_maui_desktop.jpg)
